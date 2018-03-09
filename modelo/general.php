@@ -94,6 +94,7 @@ class General_modelo
         $nombre   = mb_ucfirst($data['nombre']);
         $apellido = mb_ucfirst($data['apellido']);
         $perfil   = mb_ucfirst($data['perfil']);
+        $submenu  = $this->getMainMenu($data['idPerfil']);
         $menu     = "
         <nav class=\"navbar-default navbar-static-side\" role=\"navigation\">
             <div class=\"sidebar-collapse\">
@@ -111,16 +112,41 @@ class General_modelo
                             IN
                         </div>
                     </li>
-                    <li class=\"active\">
-                        <a href=\"index.html\"><i class=\"fa fa-th-large\"></i> <span class=\"nav-label\">Main view</span></a>
-                    </li>
-                    <li>
-                        <a href=\"minor.html\"><i class=\"fa fa-th-large\"></i> <span class=\"nav-label\">Minor view</span> </a>
-                    </li>
+                    $submenu
                 </ul>
     
             </div>
         </nav>
+        ";
+
+        return $menu;
+    }
+
+    public function getMainMenu($perfil)
+    {
+        $enlaces = '';
+        $data    = $this->db->query("SELECT menu FROM menu WHERE idPerfil='$perfil'");
+        if (mysqli_num_rows($data) > 0) {
+            $preItem = mysqli_fetch_assoc($data);
+            $items   = json_decode($preItem['menu']);
+            foreach ($items as $item) {
+                $enlace  = $item['acceso'];
+                $titulo  = $item['titulo'];
+                $enlaces .= '<li>
+            <a href="' . $enlace . '">
+                <i class="fa fa-th-large"></i> <span class="nav-label">' . $titulo . '</span> </a>
+            </li>';
+            }
+        }
+
+        $menu = "        
+        <li class=\"active\">
+            <a href=\"index.html\"><i class=\"fa fa-th-large\"></i> <span class=\"nav-label\">Main view</span></a>
+        </li>
+        <li>
+            <a href=\"minor.html\"><i class=\"fa fa-th-large\"></i> <span class=\"nav-label\">Minor view</span> </a>
+        </li>
+        $enlaces
         ";
 
         return $menu;

@@ -52,6 +52,7 @@ class Usuario_modelo
                 $_SESSION['apellido']  = $responseX['apellido'];
                 $_SESSION['perfil']    = $responseX['perfil'];
                 $_SESSION['usuario']   = $responseX['usuario'];
+                $_SESSION['idPerfil']  = $responseX['idPerfil'];
                 $_SESSION['idUsuario'] = $responseX['id'];
                 $_SESSION['correo']    = $responseX['correo'];
                 $_SESSION['persona']   = $_SESSION['nombre'] . ' ' . $_SESSION['apellido'];
